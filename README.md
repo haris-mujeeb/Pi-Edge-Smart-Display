@@ -63,3 +63,60 @@ pi-edge-smart-display/
 ├── .gitignore
 ├── requirements.txt        # Python dependencies
 └── README.md
+
+```
+
+---
+
+## Testing
+
+This project uses `pytest` for backend unit and integration testing. The tests are configured to ensure logical isolation and prevent collisions with global system environments.
+
+### Running Tests
+
+**1. Run Fast Unit Tests Only** To run isolated tests that mock hardware and external servers (ideal for rapid development):
+
+```bash
+pytest -m "not integration"
+
+```
+
+**2. Run Full Hardware Integration Tests** To run tests that actually trigger the local LLM, GPU, or Audio hardware (requires services like Ollama to be running):
+
+```bash
+pytest -m "integration"
+
+```
+
+**3. Run with Debug Logging** By default, `pytest` hides print statements and logs. To view real-time debug outputs and see exactly what the backend is processing, append the following flags:
+
+```bash
+pytest -m "not integration" -s --log-cli-level=DEBUG
+
+```
+
+### Troubleshooting: ROS 2 Environment Collisions
+
+Because this project's virtual environment relies on strict pathing, having a global **ROS 2** environment sourced in your terminal (e.g., `/opt/ros/jazzy/`) can cause `pytest` to crash. ROS aggressively injects its own plugins (like `launch_testing`) into the system path, which lack the necessary dependencies inside this project's `.venv`.
+
+**The built-in fix:**
+The included `pytest.ini` file is configured to lock down the import paths and prevent wandering:
+
+```ini
+[pytest]
+pythonpath = .
+addopts = --import-mode=importlib
+markers =
+    integration: marks tests as integration tests that require the Ollama server
+
+```
+
+**The manual override:**
+If the `pytest.ini` isolation fails and ROS 2 is still causing `ModuleNotFoundError` crashes before the tests even start, temporarily blind Python to the global environment variables by running your tests with an empty `PYTHONPATH`:
+
+```bash
+PYTHONPATH="" pytest
+
+```
+
+*(Tip: Create a terminal alias like `alias pycl="PYTHONPATH=\"\" pytest"` for convenience if you frequently develop with ROS 2 active).*
