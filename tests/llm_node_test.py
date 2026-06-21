@@ -1,4 +1,5 @@
 import logging
+from re import DEBUG
 from unittest.mock import patch
 
 import ollama
