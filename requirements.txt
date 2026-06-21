@@ -3,4 +3,6 @@ mypy
 pytest
 sounddevice
 soundfile
-numpy
+numpy<2.0.0
+opencv-python
+tflite-runtime

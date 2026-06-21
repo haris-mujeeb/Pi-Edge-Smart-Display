@@ -7,7 +7,7 @@ from src.audio.audio_to_text import record_and_save
 
 logger = logging.getLogger(__name__)
 
-def test_record_and_save_creates_wav(tmp_path):
+def test_mic_record_and_creates_wav(tmp_path):
   """
   Integration test to verify the physical microphone captures real audio.
   NOTE: This test requires a working microphone and OS permissions. 
