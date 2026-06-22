@@ -68,6 +68,85 @@ pi-edge-smart-display/
 
 ---
 
+## Installation
+
+### Python 3.10 Setup (via uv)
+
+To avoid system package conflicts on your Raspberry Pi and ensure compatibility with the project's ML libraries, we recommend managing Python and your virtual environment using `uv`, an extremely fast Python project manager.
+
+**1. Install uv**
+Run the official standalone installer script:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+```
+
+*Note: You will need to restart your terminal or run `source ~/.bashrc` for the `uv` command to be recognized.*
+
+**2. Install Python 3.10**
+Instead of building from source, `uv` instantly fetches pre-compiled Python binaries:
+
+```bash
+uv python install 3.10
+
+```
+
+**3. Create the Virtual Environment**
+Navigate to the root directory of this repository and tell `uv` to create a virtual environment explicitly locked to Python 3.10:
+
+```bash
+cd pi-edge-smart-display
+uv venv --python 3.10
+
+```
+
+**4. Activate the Environment**
+Activate the new virtual environment before running the project or installing the `requirements.txt`:
+
+```bash
+source .venv/bin/activate
+
+```
+
+*Verify the installation by running `python --version`. It should output a Python 3.10.x version.*
+
+---
+
+*(You can drop this right into your README above the **Testing** section. Just let me know if you also need the dependency installation step (`uv pip install -r requirements.txt`) added in!)*
+
+---
+
+
+Here is the complete **Installation** section updated to include the Ollama setup and the specific `qwen2.5:1.5b` model download, matching the default parameters in your `llm_node.py` file.
+
+You can drop this right in place of the previous Installation section.
+
+---
+
+### LLM Setup (Ollama & Qwen)
+
+Since this project runs the reasoning engine entirely on-device, you will need to install Ollama and download the specific language model used in the orchestration backend.
+
+**1. Install Ollama**
+Run the official Linux installation script. This will automatically detect your Raspberry Pi's ARM64 architecture and set up Ollama as a background service:
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+
+```
+
+**2. Download the Qwen Model**
+The Python backend (`src/llm/llm_node.py`) is configured to use the Qwen 2.5 1.5B model by default. Pull this model to your local hardware:
+
+```bash
+ollama pull qwen2.5:1.5b
+
+```
+
+*Note: If you plan on running the backend hardware integration tests via `pytest`, the Ollama service must be running in the background and this specific model must be pulled first to avoid a `ResponseError`.*
+
+
 ## Testing
 
 This project uses `pytest` for backend unit and integration testing. The tests are configured to ensure logical isolation and prevent collisions with global system environments.
@@ -108,7 +187,6 @@ pythonpath = .
 addopts = --import-mode=importlib
 markers =
     integration: marks tests as integration tests that require the Ollama server
-
 ```
 
 **The manual override:**
