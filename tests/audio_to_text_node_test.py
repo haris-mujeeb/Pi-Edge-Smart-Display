@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 import numpy as np
 
-from src.audio.audio_to_text import get_i2c_mic_id, record_and_save, transcribe_audio
+from src.audio.audio_to_text_node import get_i2c_mic_id, record_and_save, transcribe_audio
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ def test_mic_record_and_creates_wav(tmp_path):
   
   mic_id = get_i2c_mic_id()
   
-  logger.info(f"Recoding for {duration} seconds.")
+  logger.info(f"Recording for {duration} seconds.")
   recording = record_and_save(
     filename=test_filename, 
     output_folder=tmp_path, 

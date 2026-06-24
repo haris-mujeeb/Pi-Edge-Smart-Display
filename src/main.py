@@ -3,7 +3,7 @@ from os import name
 import sys
 from pathlib import Path
 
-from src.audio.audio_to_text import get_i2c_mic_id, record_and_save, transcribe_audio
+from src.audio.audio_to_text_node import get_i2c_mic_id, record_and_save, transcribe_audio
 from src.llm.llm_node import get_response_from_ollama
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -33,7 +33,7 @@ def run_pipeline(audio_filename, audio_output_folder):
 
 if __name__ == "__main__":
   audio_output_folder = "audio_files"
-  filename = "recoding.wav"
+  filename = "recording.wav"
   save_dir = Path(audio_output_folder)
   filepath = save_dir / filename
 

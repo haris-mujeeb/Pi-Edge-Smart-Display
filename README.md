@@ -32,39 +32,77 @@ The system orchestrates a localized Large Language Model (LLM) for reasoning, ac
 
 ## Project Structure
 
-This repository follows a modular, service-oriented architecture to separate hardware interfaces, AI models, and the web frontend.
+This repository follows a modular, service-oriented architecture to separate hardware interfaces, AI models, and the web frontend. Below is the directory map showing both currently implemented files and planned/missing files to guide future development.
 
 ```text
 pi-edge-smart-display/
-├── hardware/               # Hardware configuration and testing scripts
-│   ├── asound.conf         # ALSA audio configuration for I2S shared clock
-│   └── boot_config.txt     # Pi /boot/firmware/config.txt overlays
+├── audio_files/            # Directory for recorded and test audio files
+│   ├── hello.wav
+│   ├── recording.wav
+│   └── test_hardware_mic.wav
+├── hardware/               # Hardware configuration and physical casing
+│   ├── 3d-printed-enclosure/ # STL/3MF files for casing
+│   ├── asound.conf         # [Planned] ALSA audio configuration for I2S shared clock
+│   └── boot_config.txt     # [Planned] Pi /boot/firmware/config.txt overlays
+├── images/                 # Test images and captured camera frames
+│   ├── capture.jpg         # Sample captured photo
+│   └── test_data/          # Static images for validating face detection
 ├── models/                 # Local directory for downloaded weights (Git-ignored)
-│   ├── llm/                # GGUF files for llama.cpp/Ollama
-│   ├── vision/             # .tflite models compiled for Edge TPU
-│   └── voice/              # Whisper and Piper model files
+│   ├── face_detection_front.tflite # Face detection model weights
+│   ├── llm/                # [Planned] GGUF files for llama.cpp/Ollama
+│   ├── vision/             # [Planned] .tflite models compiled for Edge TPU
+│   └── voice/              # [Planned] Whisper and Piper model files
 ├── src/                    # Core Python backend and orchestration
-│   ├── api/                # FastAPI application and routes
-│   ├── audio/              # I2S input/output, wake word, and TTS managers
-│   ├── llm/                # Prompts, function calling, and Ollama integration
-│   ├── vision/             # Coral TPU face detection and camera loop
-│   └── main.py             # Main execution loop and service manager
-├── tests/                  # Unit and integration tests (gtest/pytest)
-│   ├── test_audio.py
-│   └── test_vision.py
-├── ui/                     # Frontend web application
-│   ├── public/             
-│   ├── src/                # React/Vue components (Dashboard, Chat, widgets)
-│   ├── package.json
-│   └── vite.config.js
-├── scripts/                # Utility scripts (setup, install, run)
-│   ├── setup_env.sh        # Installs dependencies and apt packages
-│   └── start_kiosk.sh      # Launches Chromium in full-screen kiosk mode
+│   ├── api/                # [Planned] FastAPI application and routes
+│   ├── audio/              # Audio capture and transcription
+│   │   └── audio_to_text_node.py # Whisper-based speech-to-text pipeline
+│   ├── llm/                # Local LLM orchestration
+│   │   └── llm_node.py     # Prompt queries and Ollama integration
+│   ├── vision/             # Edge computer vision
+│   │   └── vision_node.py  # Camera feed capture and TF-Lite face detection
+│   └── main.py             # Main pipeline orchestrator
+├── tests/                  # Backend unit and integration tests (pytest)
+│   ├── audio_to_text_node_test.py # Audio transcription tests
+│   ├── llm_node_test.py    # Local LLM and mock API tests
+│   └── vision_node_test.py # Face detection and camera tests
+├── ui/                     # [Planned] Frontend web application
+│   ├── public/             # [Planned] Static public assets
+│   ├── src/                # [Planned] React/Vue components (Dashboard, Chat, widgets)
+│   ├── package.json        # [Planned] Frontend package details
+│   └── vite.config.js      # [Planned] Bundler/Vite configuration
+├── scripts/                # [Planned] Automation/Utility scripts
+│   ├── setup_env.sh        # [Planned] Automated environment installation script
+│   └── start_kiosk.sh      # [Planned] Script to launch Chromium in kiosk mode
 ├── .gitignore
 ├── requirements.txt        # Python dependencies
 └── README.md
-
 ```
+
+---
+
+## Project Status & Checklist
+
+Below is the current progress roadmap of the project. This checklist tracks what has been implemented and tested, along with remaining tasks for both hardware and software integrations.
+
+### Completed / Tested Tasks
+- [x] **Audio Input Hardware:** Tested recording using the laptop's built-in microphone and the external **INMP441** microphone module via I2S.
+- [x] **Speech-to-Text (ASR):** Integrated speech-to-text transcription utilizing `faster_whisper` (specifically the `tiny.en` model).
+- [x] **Local LLM Orchestration:** Set up local text generation reasoning using Ollama with the `qwen2.5:1.5b` model.
+- [x] **Vision Detection (Laptop):** Verified facial detection using TensorFlow Lite (`face_detection_front.tflite`) on the laptop's built-in webcam.
+
+### Remaining Tasks
+- [ ] **Vision Hardware Testing:**
+  - [ ] Test face detection on a **Raspberry Pi 4B** using the **OV5647** camera module.
+- [ ] **Wake Word Activation:**
+  - [ ] Implement and integrate wake word detection (e.g., using openWakeWord or Porcupine).
+- [ ] **Text-to-Speech (TTS):**
+  - [ ] Implement localized voice generation (e.g., using Piper TTS) to speak response outputs.
+- [ ] **Frontend User Interface:**
+  - [ ] Build and style the web display dashboard (React/Vue.js running in Chromium Kiosk Mode).
+- [ ] **FastAPI Backend & API Server:**
+  - [ ] Complete API routes and backend orchestration under `src/api/`.
+- [ ] **Hardware Configuration Files:**
+  - [ ] Write and deploy ALSA audio configurations (`hardware/asound.conf`) and Raspberry Pi boot overrides (`hardware/boot_config.txt`).
 
 ---
 

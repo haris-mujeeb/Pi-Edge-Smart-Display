@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 import cv2
 import pytest
 
-from src.vision.camera import capture_and_save, detect_face_and_save
+from src.vision.vision_node import capture_and_save, detect_face_and_save
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ def test_camera_record_and_save_jpg(tmp_path):
   assert photo is not None
   
 
-@patch('src.vision.camera.cv2.VideoCapture')
+@patch('src.vision.vision_node.cv2.VideoCapture')
 def test_face_detection_model(mock_video_capture, tmp_path):
   """
   Test the TF-Lite model's ability to detect faces using a static image.
