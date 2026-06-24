@@ -24,10 +24,10 @@ def test_parses_ollama_dictionary_response_correctly(mock_generate):
 @patch('src.llm.llm_node.ollama.generate')
 def test_raises_error_when_model_missing(mock_generate):
   """Test that an ollama.ResponseError is properly caught and re-raised."""
-  mock_generate.side_effect = ollama.ResponseError("model 'fake_model' not found")
+  mock_generate.side_effect = ollama.ResponseError("model 'dummy_model' not found")
   
   with pytest.raises(ollama.ResponseError):
-    get_response_from_ollama(model="fake_model")
+    get_response_from_ollama(model="dummy_model")
 
 @patch('src.llm.llm_node.ollama.generate')
 def test_handles_unexpected_dictionary_structure(mock_generate):
@@ -47,7 +47,10 @@ def test_get_response_from_actual_ollama_returns_valid_string():
   successfully and returns a valid, non-empty string.
   """
   
-  resp = get_response_from_ollama()
-    
+  prompt = "Hello. Hello."
+  resp = get_response_from_ollama(prompt=prompt)
+  logger.info(f"Prompt to LLM: {prompt}"
+    f"Response from LLM: {resp}")
+  
   assert isinstance(resp, str), f"Expected response to be a string, but got {type(resp)}"
   assert len(resp.strip()) > 0, "Expected response to contain text, but got an empty string"

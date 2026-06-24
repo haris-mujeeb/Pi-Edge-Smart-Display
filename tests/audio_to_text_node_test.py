@@ -1,9 +1,10 @@
 import logging
 import os
 
+from pathlib import Path
 import numpy as np
 
-from src.audio.audio_to_text import record_and_save
+from src.audio.audio_to_text import record_and_save, transcribe_audio
 
 logger = logging.getLogger(__name__)
 
@@ -38,3 +39,17 @@ def test_mic_record_and_creates_wav(tmp_path):
   
   if os.path.exists(test_filename):
     os.remove(test_filename)
+    
+def test_audio_to_text():
+  """
+  
+  """
+  test_file_dir = "audio_files"
+  test_filename = "hello.wav"
+  test_filepath = Path(test_file_dir) / test_filename
+  
+  assert os.path.exists(test_filepath)
+  
+  text = transcribe_audio(file_path=str(test_filepath))
+  
+  logger.info(f"Response: {text}")
