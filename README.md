@@ -9,6 +9,12 @@
 
 The system orchestrates a localized Large Language Model (LLM) for reasoning, accelerated speech-to-text/text-to-speech pipelines, and hardware-accelerated face detection, ensuring user data never leaves the device.
 
+## Test Video
+### 1st Demo: Audio -> Text -> LLM Prompt -> LLM Response -> Speech 
+
+https://github.com/user-attachments/assets/c6944293-f2fc-4b79-bc87-aa9bb73d7a89
+
+
 ## Components
 
 ### Hardware
