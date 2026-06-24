@@ -26,7 +26,7 @@ def get_i2c_mic_id() -> int:
   return None
 
 
-def record_and_save(filename="recoding.wav", output_folder="audio_files", duration=2.0, samplerate=44100, channels=1, device_id=None):
+def record_and_save(filename="recoding.wav", output_folder="audio_files", duration=2.0, samplerate=48000, channels=1, device_id=None):
   """Record audio and save to a WAV file in a specific folder"""
   
   if device_id is not None:
